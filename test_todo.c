@@ -18,7 +18,7 @@ typedef struct TodoTxt {
 	char **lines;
 } TodoTxt;
 
-char *create_tmpfile(char *template);
+char *_create_tmpfile(char *template);
 
 void test_todotxt_open() {
 	TodoTxt *todo = todotxt_open("todo.txt");
@@ -63,7 +63,7 @@ void test_todotxt_read_task_with_priority() {
 }
 
 void test_todotxt_write_tasks() {
-	char *tmpfile = create_tmpfile("/tmp/todo.XXXXXXX");
+	char *tmpfile = _create_tmpfile("/tmp/todo.XXXXXXX");
 	TodoTxt *todo = todotxt_open(tmpfile);
 	assert(todo != 0);
 
@@ -116,7 +116,7 @@ void test_sort_by_priority() {
     free_tasklist(sorted);
 }
 
-char *create_tmpfile(char *template) {
+char *_create_tmpfile(char *template) {
 	int len = strlen(template);
 	char *tmpfile = malloc(len);
 	strncat(tmpfile, template, len);

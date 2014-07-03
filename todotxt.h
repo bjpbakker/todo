@@ -1,7 +1,7 @@
 #ifndef TODOTXT_H
 #define TODOTXT_H
 
-#include "todo.h"
+#include "tasks.h"
 
 struct TodoTxt;
 typedef struct TodoTxt TodoTxt;

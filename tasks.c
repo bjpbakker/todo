@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "todo.h"
+#include "tasks.h"
 
 Task *create_task(char *description) {
 	Task *t = malloc(sizeof(Task));

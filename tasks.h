@@ -1,5 +1,5 @@
-#ifndef TODO_H
-#define TODO_H
+#ifndef TASKS_H
+#define TASKS_H
 
 struct Task {
 	char priority;

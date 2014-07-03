@@ -4,7 +4,7 @@
 
 #include <assert.h>
 
-#include "todo.h"
+#include "tasks.h"
 #include "todotxt.h"
 
 #define run_test(fn_name)\
@@ -94,14 +94,6 @@ void test_todotxt_write_tasks() {
 	free(tmpfile);
 }
 
-char *create_tmpfile(char *template) {
-	int len = strlen(template);
-	char *tmpfile = malloc(len);
-	strncat(tmpfile, template, len);
-	mkstemp(tmpfile);
-	return tmpfile;
-}
-
 void test_by_priority() {
 	Task *one = create_task("ONE");
     one->priority = 'A';
@@ -117,6 +109,14 @@ void test_by_priority() {
 
     assert(list->tasks[0] == one);
     assert(list->tasks[1] == two);
+}
+
+char *create_tmpfile(char *template) {
+	int len = strlen(template);
+	char *tmpfile = malloc(len);
+	strncat(tmpfile, template, len);
+	mkstemp(tmpfile);
+	return tmpfile;
 }
 
 int main() {

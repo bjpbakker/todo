@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "tasks.h"
 #include "todotxt.h"
 
 int main(void) {
@@ -9,14 +10,11 @@ int main(void) {
 	if (!todo) { puts("Cannot open todo.txt"); return 1; }
 
 	TaskList *list = todotxt_read_tasklist(todo);
+	TaskList *prioritized = create_tasklist(list->len);
+	tasklist_sort_by_priority(list, prioritized);
 
-	size_t size = sizeof(Task*) * list->len;
-	Task **tasks = malloc(size);
-	memcpy(tasks, list->tasks, size);
-	qsort(tasks, list->len, sizeof(Task*), by_priority);
-
-	for (int i = 0; i < list->len; ++i) {
-		Task *t = tasks[i];
+	for (int i = 0; i < prioritized->len; ++i) {
+		Task *t = prioritized->tasks[i];
 
 		char *display = malloc(strlen(t->description) + 3);
 		if ('\0' != t->priority) {
@@ -28,7 +26,7 @@ int main(void) {
 
 		puts(display);
 	}
-	free(tasks);
+	free_tasklist(prioritized);
 	free_tasklist(list);
 	todotxt_close(todo);
 }

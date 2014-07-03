@@ -94,21 +94,26 @@ void test_todotxt_write_tasks() {
 	free(tmpfile);
 }
 
-void test_by_priority() {
-	Task *one = create_task("ONE");
-    one->priority = 'A';
-	Task *two = create_task("TWO");
-    two->priority = 'B';
+void test_sort_by_priority() {
+	Task *one = create_prioritized_task("ONE", 'A');
+	Task *two = create_prioritized_task("TWO", 'B');
+	Task *three = create_task("THREE");
 
-	TaskList *list = create_tasklist(2);
+	TaskList *list = create_tasklist(3);
 	list->tasks[0] = two;
-	list->tasks[1] = one;
-	list->len = 2;
+	list->tasks[1] = three;
+	list->tasks[2] = one;
+	list->len = 3;
 
-    qsort(list->tasks, 2, sizeof(Task*), by_priority);
+	TaskList *sorted = create_tasklist(3);
+	tasklist_sort_by_priority(list, sorted);
 
-    assert(list->tasks[0] == one);
-    assert(list->tasks[1] == two);
+	assert(0 == strcmp("ONE", sorted->tasks[0]->description));
+	assert(0 == strcmp("TWO", sorted->tasks[1]->description));
+	assert(0 == strcmp("THREE", sorted->tasks[2]->description));
+
+    free_tasklist(list);
+    free_tasklist(sorted);
 }
 
 char *create_tmpfile(char *template) {
@@ -125,7 +130,7 @@ int main() {
 	run_test(test_todotxt_read_tasks);
 	run_test(test_todotxt_read_task_with_priority);
 	run_test(test_todotxt_write_tasks);
-    run_test(test_by_priority);
+	run_test(test_sort_by_priority);
 	printf("\nOK\n");
 	return 0;
 }

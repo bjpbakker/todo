@@ -14,10 +14,13 @@ struct TaskList {
 typedef struct TaskList TaskList;
 
 Task *create_task(char *description);
+Task *create_prioritized_task(char *description, char priority);
+Task *copy_task(Task *proto);
+
 TaskList *create_tasklist(int capacity);
 void free_tasklist(TaskList *list);
 
-int by_priority(const void *lhs, const void *rhs);
+void tasklist_sort_by_priority(TaskList *src, TaskList *dest);
 
 #endif
 

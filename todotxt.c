@@ -6,12 +6,6 @@
 #include "tasks.h"
 #include "todotxt.h"
 
-typedef struct TodoTxt {
-	char* filename;
-	int len;
-	char **lines;
-} TodoTxt;
-
 #define MAX_LINES_IN_FILE 1000
 #define MAX_LINE_LENGTH 1024
 

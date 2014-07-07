@@ -12,12 +12,6 @@
 	fn_name();
 
 
-typedef struct TodoTxt {
-	void* _;
-	int len;
-	char **lines;
-} TodoTxt;
-
 char *_create_tmpfile(char *template);
 
 void test_todotxt_open() {

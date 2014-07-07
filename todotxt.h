@@ -4,7 +4,11 @@
 #include "tasks.h"
 
 struct TodoTxt;
-typedef struct TodoTxt TodoTxt;
+typedef struct TodoTxt {
+	char* filename;
+	int len;
+	char **lines;
+} TodoTxt;
 
 TodoTxt *todotxt_open(char *filename);
 void todotxt_close(TodoTxt *todo);

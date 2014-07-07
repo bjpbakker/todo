@@ -24,6 +24,14 @@ Task *copy_task(Task *proto) {
 	return t;
 }
 
+int is_prioritized(Task *task) {
+	return task->priority != '\0';
+}
+
+int is_unprioritized(Task *task) {
+	return ! is_prioritized(task);
+}
+
 TaskList *create_tasklist(int capacity) {
 	TaskList *list = malloc(sizeof(TaskList));
 	list->len = 0;
@@ -54,9 +62,7 @@ int _by_priority(const void *lhs, const void *rhs) {
 	Task *t1 = *(Task**)lhs;
 	Task *t2 = *(Task**)rhs;
 	if (t1->priority == t2->priority) return 0;
-	if (t1->priority == '\0') return 1;
-	if (t2->priority == '\0') return -1;
-	if (t1->priority < t2->priority) return -1;
-	if (t1->priority > t2->priority) return 1;
+	if (is_unprioritized(t2) || (is_prioritized(t1) && t1->priority < t2->priority)) return -1;
+	return 1; // is_unprioritized(t1) || t1->priority > t2->priority
 }
 

@@ -17,6 +17,9 @@ Task *create_task(char *description);
 Task *create_prioritized_task(char *description, char priority);
 Task *copy_task(Task *proto);
 
+int is_prioritized(Task *task);
+int is_unprioritized(Task *task);
+
 TaskList *create_tasklist(int capacity);
 void free_tasklist(TaskList *list);
 

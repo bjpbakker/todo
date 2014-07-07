@@ -94,6 +94,16 @@ void test_todotxt_write_tasks() {
 	free(tmpfile);
 }
 
+void test_prioritized() {
+    Task *prioritized = create_prioritized_task("task", 'A');
+    assert(is_prioritized(prioritized));
+    assert(! is_unprioritized(prioritized));
+
+    Task *unprioritized = create_task("task");
+    assert(! is_prioritized(unprioritized));
+    assert(is_unprioritized(unprioritized));
+}
+
 void test_sort_by_priority() {
 	Task *one = create_prioritized_task("ONE", 'A');
 	Task *two = create_prioritized_task("TWO", 'B');
@@ -130,6 +140,7 @@ int main() {
 	run_test(test_todotxt_read_tasks);
 	run_test(test_todotxt_read_task_with_priority);
 	run_test(test_todotxt_write_tasks);
+	run_test(test_prioritized);
 	run_test(test_sort_by_priority);
 	printf("\nOK\n");
 	return 0;

@@ -15,7 +15,7 @@
 char *_create_tmpfile(char *template);
 
 void test_todotxt_open() {
-	TodoTxt *todo = todotxt_open("todo.txt");
+	TodoTxt *todo = todotxt_open("examples/todo.txt");
 	assert(todo != 0);
 	assert(todo->len > 0);
 	assert(strcmp(todo->lines[0], "") != 0);

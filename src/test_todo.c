@@ -44,15 +44,17 @@ void test_todotxt_read_tasks() {
 
 void test_todotxt_read_task_with_priority() {
 	TodoTxt todo;
-	todo.len = 2;
+	todo.len = 3;
 	todo.lines = malloc(sizeof(char*));
 	todo.lines[0] = "(A) Task";
 	todo.lines[1] = "(A)-> Task";
+	todo.lines[2] = "(a) Task";
 
 	TaskList *list = todotxt_read_tasklist(&todo);
 	assert(list->tasks[0]->priority == 'A');
 	assert(strcmp(list->tasks[0]->description, "Task") == 0);
 	assert(list->tasks[1]->priority == '\0');
+	assert(list->tasks[2]->priority == '\0');
 	free_tasklist(list);
 }
 

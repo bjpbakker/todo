@@ -12,6 +12,7 @@
 TodoTxt *_create_todotxt(char *filename);
 
 void _parse_task(char *line, Task *dest);
+int _line_has_priority(char *line);
 int _fexists(char *filename);
 
 int _empty_line(char *line);
@@ -107,7 +108,7 @@ int read_lines(FILE *file, char **lines) {
 }
 
 void _parse_task(char *line, Task *dest) {
-	if (line[0] == '(' && line[2] == ')' && line[3] == ' ') {
+	if (_line_has_priority(line)) {
 		dest->priority = line[1];
 		dest->description = malloc(strlen(line) - 4);
 		strcat(dest->description, &line[4]);
@@ -115,6 +116,14 @@ void _parse_task(char *line, Task *dest) {
 		dest->priority = '\0';
 		dest->description = line;
 	}
+}
+
+int _line_has_priority(char *line) {
+    return strlen(line) > 4
+        && line[0] == '('
+        && line[1] >= 'A' && line[1] <= 'Z'
+        && line[2] == ')'
+        && line[3] == ' ';
 }
 
 int _fexists(char *filename) {

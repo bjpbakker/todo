@@ -2,8 +2,8 @@
 #define TASKS_H
 
 struct Task {
-	char priority;
 	char *description;
+	char priority;
 };
 typedef struct Task Task;
 

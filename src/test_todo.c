@@ -37,7 +37,7 @@ void test_todotxt_read_tasks() {
 
 	TaskList *list = todotxt_read_tasklist(&todo);
 	assert(list->len == 1);
-	assert(list->tasks[0]->priority == '\0');
+	assert(is_unprioritized(list->tasks[0]));
 	assert(strcmp(list->tasks[0]->description, "One Task") == 0);
 	free_tasklist(list);
 }
@@ -53,8 +53,10 @@ void test_todotxt_read_task_with_priority() {
 	TaskList *list = todotxt_read_tasklist(&todo);
 	assert(list->tasks[0]->priority == 'A');
 	assert(strcmp(list->tasks[0]->description, "Task") == 0);
-	assert(list->tasks[1]->priority == '\0');
-	assert(list->tasks[2]->priority == '\0');
+	assert(is_unprioritized(list->tasks[1]));
+	assert(is_unprioritized(list->tasks[2]));
+	free_tasklist(list);
+}
 	free_tasklist(list);
 }
 

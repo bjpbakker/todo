@@ -77,7 +77,7 @@ int todotxt_write_tasklist(TodoTxt *todo, TaskList *tasks) {
 		memset(buffer, 0, MAX_LINE_LENGTH);
 		int position = 0;
 		Task *task = tasks->tasks[i];
-		if ('\0' != task->priority) {
+		if (is_prioritized(task)) {
 			buffer[0] = '('; buffer[1] = task->priority; buffer[2] = ')'; buffer[3] = ' ';
 			position = 4;
 		}

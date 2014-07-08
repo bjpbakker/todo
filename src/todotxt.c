@@ -55,14 +55,13 @@ void todotxt_close(TodoTxt *todo) {
 }
 
 TaskList *todotxt_read_tasklist(TodoTxt *todo) {
-	TaskList *list = malloc(sizeof(TaskList));
-	list->len = todo->len;
-	list->tasks = malloc(list->len * sizeof(void*));
+	TaskList *list = create_tasklist(todo->len);
 	for (int i = 0; i < todo->len; ++i) {
 		Task *t = malloc(sizeof(Task));
 		_parse_task(todo->lines[i], t);
 		list->tasks[i] = t;
 	}
+	list->len = todo->len;
 	return list;
 }
 

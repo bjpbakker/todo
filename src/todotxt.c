@@ -11,7 +11,7 @@
 
 TodoTxt *_create_todotxt(char *filename);
 
-void _parse_task(char *line, Task *dest);
+Task *_read_task(char *line);
 int _line_has_priority(char *line);
 int _fexists(char *filename);
 
@@ -57,9 +57,8 @@ void todotxt_close(TodoTxt *todo) {
 TaskList *todotxt_read_tasklist(TodoTxt *todo) {
 	TaskList *list = create_tasklist(todo->len);
 	for (int i = 0; i < todo->len; ++i) {
-		Task *t = malloc(sizeof(Task));
-		_parse_task(todo->lines[i], t);
-		list->tasks[i] = t;
+		char *line = todo->lines[i];
+		list->tasks[i] = _read_task(line);
 	}
 	list->len = todo->len;
 	return list;
@@ -106,15 +105,17 @@ int read_lines(FILE *file, char **lines) {
 	return count;
 }
 
-void _parse_task(char *line, Task *dest) {
+Task *_read_task(char *line) {
+	Task *t;
 	if (_line_has_priority(line)) {
-		dest->priority = line[1];
-		dest->description = malloc(strlen(line) - 4);
-		strcat(dest->description, &line[4]);
+		char priority = line[1];
+		char *description = malloc(strlen(line) - 4);
+		strcat(description, &line[4]);
+		t = create_prioritized_task(description, priority);
 	} else {
-		dest->priority = '\0';
-		dest->description = line;
+		t = create_task(line);
 	}
+	return t;
 }
 
 int _line_has_priority(char *line) {

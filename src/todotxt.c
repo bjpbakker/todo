@@ -119,11 +119,11 @@ void _parse_task(char *line, Task *dest) {
 }
 
 int _line_has_priority(char *line) {
-    return strlen(line) > 4
-        && line[0] == '('
-        && line[1] >= 'A' && line[1] <= 'Z'
-        && line[2] == ')'
-        && line[3] == ' ';
+	return strlen(line) > 4
+		&& line[0] == '('
+		&& line[1] >= 'A' && line[1] <= 'Z'
+		&& line[2] == ')'
+		&& line[3] == ' ';
 }
 
 int _fexists(char *filename) {

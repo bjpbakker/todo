@@ -93,13 +93,13 @@ void test_todotxt_write_tasks() {
 }
 
 void test_prioritized() {
-    Task *prioritized = create_prioritized_task("task", 'A');
-    assert(is_prioritized(prioritized));
-    assert(! is_unprioritized(prioritized));
+	Task *prioritized = create_prioritized_task("task", 'A');
+	assert(is_prioritized(prioritized));
+	assert(! is_unprioritized(prioritized));
 
-    Task *unprioritized = create_task("task");
-    assert(! is_prioritized(unprioritized));
-    assert(is_unprioritized(unprioritized));
+	Task *unprioritized = create_task("task");
+	assert(! is_prioritized(unprioritized));
+	assert(is_unprioritized(unprioritized));
 }
 
 void test_sort_by_priority() {
@@ -120,8 +120,8 @@ void test_sort_by_priority() {
 	assert(0 == strcmp("TWO", sorted->tasks[1]->description));
 	assert(0 == strcmp("THREE", sorted->tasks[2]->description));
 
-    free_tasklist(list);
-    free_tasklist(sorted);
+	free_tasklist(list);
+	free_tasklist(sorted);
 }
 
 char *_create_tmpfile(char *template) {

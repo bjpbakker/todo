@@ -115,6 +115,8 @@ Task *_read_task(char *line) {
 	} else {
 		t = create_task(line);
 	}
+	if (line[0] == 'x' && line[1] == ' ')
+		t->completed = 1;
 	return t;
 }
 

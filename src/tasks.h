@@ -4,6 +4,7 @@
 struct Task {
 	char *description;
 	char priority;
+	int completed;
 };
 typedef struct Task Task;
 

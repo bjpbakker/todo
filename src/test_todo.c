@@ -57,6 +57,19 @@ void test_todotxt_read_task_with_priority() {
 	assert(is_unprioritized(list->tasks[2]));
 	free_tasklist(list);
 }
+
+void test_todotxt_read_completed_task() {
+	TodoTxt todo;
+	todo.len = 3;
+	todo.lines = malloc(sizeof(char*));
+	todo.lines[0] = "x Task";
+	todo.lines[1] = "xylophone";
+	todo.lines[2] = "X task";
+
+	TaskList *list = todotxt_read_tasklist(&todo);
+	assert(list->tasks[0]->completed);
+	assert(! list->tasks[1]->completed);
+	assert(! list->tasks[2]->completed);
 	free_tasklist(list);
 }
 
@@ -134,6 +147,7 @@ int main() {
 	run_test(test_todotxt_open_with_non_existing_file);
 	run_test(test_todotxt_read_tasks);
 	run_test(test_todotxt_read_task_with_priority);
+	run_test(test_todotxt_read_completed_task);
 	run_test(test_todotxt_write_tasks);
 	run_test(test_prioritized);
 	run_test(test_sort_by_priority);

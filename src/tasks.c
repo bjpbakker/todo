@@ -9,6 +9,7 @@ Task *create_task(char *description) {
 	Task *t = malloc(sizeof(Task));
 	t->description = description;
 	t->priority = '\0';
+	t->completed = 0;
 	return t;
 }
 

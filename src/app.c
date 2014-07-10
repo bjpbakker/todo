@@ -16,7 +16,10 @@ int main(void) {
 	tasklist_sort_by_priority(list, prioritized);
 
 	for (int i = 0; i < prioritized->len; ++i) {
-		char *formatted = _format_task_for_display(prioritized->tasks[i]);
+        Task *task = prioritized->tasks[i];
+        if (task->completed) continue;
+
+		char *formatted = _format_task_for_display(task);
 		puts(formatted);
 		free(formatted);
 

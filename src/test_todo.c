@@ -77,16 +77,14 @@ void test_todotxt_write_tasks() {
 	assert(written);
 	todotxt_close(todo);
 
-	FILE *fh = fopen(tmpfile, "r");
-	assert(fh);
-	char **lines = malloc(20 * sizeof(char*));
-	memset(lines, 0, 2 * sizeof(char*));
-	int len_written = read_lines(fh, lines);
+	todo = todotxt_open(tmpfile);
+	assert(todo != 0);
 
-	assert(len_written == 2);
-	assert(0 == strcmp(lines[0], "New Task"));
-	assert(0 == strcmp(lines[1], "(A) Prioritized Task"));
+	assert(todo->len == 2);
+	assert(0 == strcmp(todo->lines[0], "New Task"));
+	assert(0 == strcmp(todo->lines[1], "(A) Prioritized Task"));
 
+	todotxt_close(todo);
 	free_tasklist(tasks);
 	free(tmpfile);
 }

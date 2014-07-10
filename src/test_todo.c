@@ -66,8 +66,7 @@ void test_todotxt_write_tasks() {
 	assert(todo != 0);
 
 	Task *task = create_task("New Task");
-	Task *prioritized = create_task("Prioritized Task");
-	prioritized->priority = 'A';
+	Task *prioritized = create_prioritized_task("Prioritized Task", 'A');
 
 	TaskList *tasks = create_tasklist(2);
 	tasks->len = 2;

@@ -45,7 +45,7 @@ void test_todotxt_read_tasks() {
 void test_todotxt_read_task_with_priority() {
 	TodoTxt todo;
 	todo.len = 3;
-	todo.lines = malloc(sizeof(char*));
+	todo.lines = malloc(todo.len * sizeof(char*));
 	todo.lines[0] = "(A) Task";
 	todo.lines[1] = "(A)-> Task";
 	todo.lines[2] = "(a) Task";
@@ -61,7 +61,7 @@ void test_todotxt_read_task_with_priority() {
 void test_todotxt_read_completed_task() {
 	TodoTxt todo;
 	todo.len = 3;
-	todo.lines = malloc(sizeof(char*));
+	todo.lines = malloc(todo.len * sizeof(char*));
 	todo.lines[0] = "x Task";
 	todo.lines[1] = "xylophone";
 	todo.lines[2] = "X task";

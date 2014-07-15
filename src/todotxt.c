@@ -12,7 +12,10 @@
 TodoTxt *_create_todotxt(char *filename);
 
 Task *_read_task(char *line);
-int _line_has_priority(char *line);
+int _read_completed(char *line, Task *dest);
+int _read_priority(char *line, Task *dest);
+int _read_description(char *line, Task *dest);
+
 int _fexists(char *filename);
 
 int _empty_line(char *line);
@@ -106,26 +109,42 @@ int read_lines(FILE *file, char **lines) {
 }
 
 Task *_read_task(char *line) {
-	Task *t;
-	if (_line_has_priority(line)) {
-		char priority = line[1];
-		char *description = malloc(strlen(line) - 4);
-		strcat(description, &line[4]);
-		t = create_prioritized_task(description, priority);
-	} else {
-		t = create_task(line);
-	}
-	if (line[0] == 'x' && line[1] == ' ')
-		t->completed = 1;
+	Task *t = create_empty_task();
+	int position = 0;
+	position += _read_completed(&line[position], t);
+	position += _read_priority(&line[position], t);
+	position += _read_description(&line[position], t);
 	return t;
 }
 
-int _line_has_priority(char *line) {
-	return strlen(line) > 4
-		&& line[0] == '('
-		&& line[1] >= 'A' && line[1] <= 'Z'
-		&& line[2] == ')'
-		&& line[3] == ' ';
+int _read_completed(char *line, Task *dest) {
+	if (line[0] == 'x' && line[1] == ' ') {
+		dest->completed = 1;
+		return 2;
+	} else {
+		return 0;
+	}
+}
+
+int _read_priority(char *line, Task *dest) {
+	int line_has_priority = strlen(line) > 4
+						&& line[0] == '('
+						&& line[1] >= 'A' && line[1] <= 'Z'
+						&& line[2] == ')'
+						&& line[3] == ' ';
+	if (line_has_priority) {
+		dest->priority = line[1];
+		return 4;
+	} else {
+		return 0;
+	}
+}
+
+int _read_description(char *line, Task *dest) {
+	int len = strlen(line);
+	dest->description = malloc(len);
+	strcat(dest->description, line);
+	return len;
 }
 
 int _fexists(char *filename) {

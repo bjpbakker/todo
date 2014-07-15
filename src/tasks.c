@@ -19,6 +19,12 @@ Task *create_prioritized_task(char *description, char priority) {
 	return t;
 }
 
+Task *create_empty_task() {
+	Task *t = malloc(sizeof(Task));
+	memset(t, 0, sizeof(Task));
+	return t;
+}
+
 Task *copy_task(Task *proto) {
 	Task *t = malloc(sizeof(Task));
 	memcpy(t, proto, sizeof(Task));

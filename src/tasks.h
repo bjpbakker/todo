@@ -16,6 +16,7 @@ typedef struct TaskList TaskList;
 
 Task *create_task(char *description);
 Task *create_prioritized_task(char *description, char priority);
+Task *create_empty_task();
 Task *copy_task(Task *proto);
 
 int is_prioritized(Task *task);

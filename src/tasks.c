@@ -7,7 +7,8 @@ int _by_priority(const void *lhs, const void *rhs);
 
 Task *create_task(char *description) {
 	Task *t = malloc(sizeof(Task));
-	t->description = description;
+	t->description = malloc(strlen(description) * sizeof(char *));
+	strcat(t->description, description);
 	t->priority = '\0';
 	t->completed = 0;
 	return t;
@@ -26,9 +27,18 @@ Task *create_empty_task() {
 }
 
 Task *copy_task(Task *proto) {
-	Task *t = malloc(sizeof(Task));
-	memcpy(t, proto, sizeof(Task));
+	Task *t = create_empty_task();
+	t->priority = proto->priority;
+	t->completed = proto->completed;
+	t->description = malloc(strlen(proto->description) * sizeof(char*));
+	strcat(t->description, proto->description);
 	return t;
+}
+
+void free_task(Task *task) {
+	if (task->description != 0)
+		free(task->description);
+	free(task);
 }
 
 int is_prioritized(Task *task) {
@@ -50,7 +60,7 @@ TaskList *create_tasklist(int capacity) {
 
 void free_tasklist(TaskList *list) {
 	for (int i = 0; i < list->len; ++i) {
-		free(list->tasks[i]);
+		free_task(list->tasks[i]);
 	}
 	free(list->tasks);
 	free(list);

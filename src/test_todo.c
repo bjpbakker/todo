@@ -105,6 +105,19 @@ void test_todotxt_write_tasks() {
 	free(tmpfile);
 }
 
+void test_copy_task() {
+	Task *proto = create_prioritized_task("proto", 'C');
+	proto->completed = 1;
+
+	Task *copy = copy_task(proto);
+	assert('C' == copy->priority);
+	assert(strcmp("proto", copy->description) == 0);
+	assert(copy->completed);
+
+	free_task(proto);
+	free_task(copy);
+}
+
 void test_prioritized() {
 	Task *prioritized = create_prioritized_task("task", 'A');
 	assert(is_prioritized(prioritized));
@@ -113,6 +126,9 @@ void test_prioritized() {
 	Task *unprioritized = create_task("task");
 	assert(! is_prioritized(unprioritized));
 	assert(is_unprioritized(unprioritized));
+
+	free_task(prioritized);
+	free_task(unprioritized);
 }
 
 void test_sort_by_priority() {
@@ -152,6 +168,7 @@ int main() {
 	run_test(test_todotxt_read_task_with_priority);
 	run_test(test_todotxt_read_completed_task);
 	run_test(test_todotxt_write_tasks);
+	run_test(test_copy_task);
 	run_test(test_prioritized);
 	run_test(test_sort_by_priority);
 	printf("\nOK\n");

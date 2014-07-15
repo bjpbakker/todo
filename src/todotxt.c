@@ -142,7 +142,7 @@ int _read_priority(char *line, Task *dest) {
 
 int _read_description(char *line, Task *dest) {
 	int len = strlen(line);
-	dest->description = malloc(len);
+	dest->description = malloc(len * sizeof(char*));
 	strcat(dest->description, line);
 	return len;
 }

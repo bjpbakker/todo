@@ -76,7 +76,7 @@ void _usage() {
 
 char *_format_task_for_display(Task* t) {
 	char *display = malloc(strlen(t->description) + 3);
-	if ('\0' != t->priority) {
+	if (is_prioritized(t)) {
 		display[0] = t->priority; display[1] = ':'; display[2] = ' ';
 	} else {
 		strcat(display, "   ");

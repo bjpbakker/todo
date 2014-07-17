@@ -2,13 +2,26 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <getopt.h>
+
 #include "tasks.h"
 #include "todotxt.h"
 
 char *_format_task_for_display(Task* t);
 
-int main(void) {
-	TodoTxt *todo = todotxt_open("todo.txt");
+struct Options {
+	char *file;
+};
+typedef struct Options Options;
+
+Options *_parse_options(int argc, char **argv);
+
+void _usage();
+
+int main(int argc, char **argv) {
+	Options *options = _parse_options(argc, argv);
+
+	TodoTxt *todo = todotxt_open(options->file);
 	if (!todo) { puts("Cannot open todo.txt"); return 1; }
 
 	TaskList *list = todotxt_read_tasklist(todo);
@@ -27,6 +40,38 @@ int main(void) {
 	free_tasklist(prioritized);
 	free_tasklist(list);
 	todotxt_close(todo);
+}
+
+Options *_parse_options(int argc, char **argv) {
+	Options *options = malloc(sizeof(Options));
+	memset(options, 0, sizeof(Options));
+	options->file = "todo.txt";
+
+	int ch;
+	while ((ch = getopt(argc, argv, "hf:")) != -1) {
+		switch (ch) {
+			case 'f':
+				options->file = optarg;
+				break;
+			case 'h':
+				_usage();
+				exit(0);
+			case '?':
+			default:
+				_usage();
+				exit(1);
+		}
+	}
+
+	return options;
+}
+
+void _usage() {
+	puts("usage: todo [OPTIONS]");
+	puts("");
+	puts("options:");
+	puts("\t-f FILE\ttodotxt file to use (default: todo.txt)");
+	puts("");
 }
 
 char *_format_task_for_display(Task* t) {

@@ -29,8 +29,8 @@ int main(int argc, char **argv) {
 	tasklist_sort_by_priority(list, prioritized);
 
 	for (int i = 0; i < prioritized->len; ++i) {
-        Task *task = prioritized->tasks[i];
-        if (task->completed) continue;
+		Task *task = prioritized->tasks[i];
+		if (task->completed) continue;
 
 		char *formatted = _format_task_for_display(task);
 		puts(formatted);

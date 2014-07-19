@@ -79,7 +79,7 @@ void test_todotxt_read_completed_task() {
 void test_todotxt_write_tasks() {
 	char *tmpfile = _create_tmpfile("/tmp/todo.XXXXXXX");
 	TodoTxt *todo = todotxt_open(tmpfile);
-	assert(todo != 0);
+	assert(todo);
 
 	Task *task = create_task("New Task");
 	Task *prioritized = create_prioritized_task("Prioritized Task", 'A');
@@ -90,7 +90,7 @@ void test_todotxt_write_tasks() {
 	tasks->tasks[1] = prioritized;
 
 	int written = todotxt_write_tasklist(todo, tasks);
-	assert(written);
+	assert(2 == written);
 	todotxt_close(todo);
 
 	todo = todotxt_open(tmpfile);

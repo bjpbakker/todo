@@ -89,7 +89,7 @@ int todotxt_write_tasklist(TodoTxt *todo, TaskList *tasks) {
 	}
 	fclose(fh);
 	todo->lines = lines;
-	return 1;
+	return todo->len;
 }
 
 int read_lines(FILE *file, char **lines) {

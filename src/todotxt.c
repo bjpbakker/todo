@@ -88,7 +88,7 @@ int todotxt_write_tasklist(TodoTxt *todo, TaskList *tasks) {
 		lines[i] = malloc(strlen(buffer));
 		strcpy(lines[i], buffer);
 	}
-	fclose(fh);
+	if (EOF == fclose(fh)) return 0;
 	todo->lines = lines;
 	return todo->len;
 }

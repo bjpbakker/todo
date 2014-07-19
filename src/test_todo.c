@@ -154,9 +154,10 @@ void test_sort_by_priority() {
 }
 
 char *_create_tmpfile(char *template) {
-	int len = strlen(template);
-	char *tmpfile = malloc(len);
-	strncat(tmpfile, template, len);
+	size_t size = strlen(template) * sizeof(char);
+	char *tmpfile = malloc(size);
+	memset(tmpfile, 0, size);
+	strncat(tmpfile, template, size);
 	mkstemp(tmpfile);
 	return tmpfile;
 }

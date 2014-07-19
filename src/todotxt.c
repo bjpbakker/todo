@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
+
 #include <unistd.h>
 
 #include "tasks.h"
@@ -120,11 +122,21 @@ Task *_read_task(char *line) {
 
 int _read_completed(char *line, Task *dest) {
 	if (line[0] == 'x' && line[1] == ' ') {
-		dest->completed = 1;
-		return 2;
-	} else {
-		return 0;
+		struct tm tm;
+		char *endOfCompletionDate = strptime(&line[2], "%Y-%m-%d", &tm);
+		if (endOfCompletionDate != NULL) {
+			tm.tm_hour = 0;
+			tm.tm_min = 0;
+			tm.tm_sec = 0;
+			tm.tm_isdst = 0;
+			time_t time = mktime(&tm);
+			time_t *completion_date = malloc(sizeof(time_t));
+			memcpy(completion_date, &time, sizeof(time_t));
+			dest->completion_date = completion_date;
+			return (endOfCompletionDate + sizeof(char)) - line;
+		}
 	}
+	return 0;
 }
 
 int _read_priority(char *line, Task *dest) {

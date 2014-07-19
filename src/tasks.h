@@ -1,10 +1,12 @@
 #ifndef TASKS_H
 #define TASKS_H
 
+#include <time.h>
+
 struct Task {
 	char *description;
 	char priority;
-	int completed;
+	time_t *completion_date;
 };
 typedef struct Task Task;
 
@@ -20,6 +22,7 @@ Task *create_empty_task();
 Task *copy_task(Task *proto);
 void free_task(Task *task);
 
+int is_completed(Task *task);
 int is_prioritized(Task *task);
 int is_unprioritized(Task *task);
 

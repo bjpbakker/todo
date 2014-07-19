@@ -44,35 +44,40 @@ void test_todotxt_read_tasks() {
 
 void test_todotxt_read_task_with_priority() {
 	TodoTxt todo;
-	todo.len = 4;
+	todo.len = 3;
 	todo.lines = malloc(todo.len * sizeof(char*));
 	todo.lines[0] = "(A) Task";
 	todo.lines[1] = "(A)-> Task";
 	todo.lines[2] = "(a) Task";
-	todo.lines[3] = "x (B) Done";
 
 	TaskList *list = todotxt_read_tasklist(&todo);
 	assert(list->tasks[0]->priority == 'A');
 	assert(strcmp(list->tasks[0]->description, "Task") == 0);
 	assert(is_unprioritized(list->tasks[1]));
 	assert(is_unprioritized(list->tasks[2]));
-	assert(list->tasks[3]->priority == 'B');
 	free_tasklist(list);
 }
 
 void test_todotxt_read_completed_task() {
 	TodoTxt todo;
-	todo.len = 3;
+	todo.len = 4;
 	todo.lines = malloc(todo.len * sizeof(char*));
-	todo.lines[0] = "x Task";
+	todo.lines[0] = "x 2014-02-22 task";
 	todo.lines[1] = "xylophone";
 	todo.lines[2] = "X task";
+	todo.lines[3] = "x task";
 
 	TaskList *list = todotxt_read_tasklist(&todo);
-	assert(list->tasks[0]->completed);
-	assert(strcmp("Task", list->tasks[0]->description) == 0);
-	assert(! list->tasks[1]->completed);
-	assert(! list->tasks[2]->completed);
+	assert(is_completed(list->tasks[0]));
+	char *completion_date = malloc(10 * sizeof(char));
+	memset(completion_date, 0, 10 * sizeof(char));
+	struct tm *tm = localtime(list->tasks[0]->completion_date);
+	strftime(completion_date, 10 * sizeof(char), "%m/%d/%Y", tm);
+	assert(0 == strcmp("02/22/2014", completion_date));
+	assert(strcmp("task", list->tasks[0]->description) == 0);
+	assert(! is_completed(list->tasks[1]));
+	assert(! is_completed(list->tasks[2]));
+	assert(! is_completed(list->tasks[3]));
 	free_tasklist(list);
 }
 
@@ -107,12 +112,17 @@ void test_todotxt_write_tasks() {
 
 void test_copy_task() {
 	Task *proto = create_prioritized_task("proto", 'C');
-	proto->completed = 1;
+	time_t *time = malloc(sizeof(time_t));
+	memset(time, 0, sizeof(time_t));
+	*time = 20000001;
+	proto->completion_date = time;
 
 	Task *copy = copy_task(proto);
 	assert('C' == copy->priority);
 	assert(strcmp("proto", copy->description) == 0);
-	assert(copy->completed);
+	assert(is_completed(copy));
+	assert(copy->completion_date);
+	assert(*proto->completion_date == *copy->completion_date);
 
 	free_task(proto);
 	free_task(copy);

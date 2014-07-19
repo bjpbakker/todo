@@ -1,5 +1,5 @@
 (B) Another task of Mine!
 Unprioritized
-x Some completed task
+x 2014-07-20 Some completed task
 (A) Task of Mine!
 

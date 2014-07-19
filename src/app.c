@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
 	for (int i = 0; i < prioritized->len; ++i) {
 		Task *task = prioritized->tasks[i];
-		if (task->completed && ! options->show_completed) continue;
+		if (is_completed(task) && ! options->show_completed) continue;
 
 		char *formatted = _format_task_for_display(task);
 		puts(formatted);
@@ -93,8 +93,15 @@ char *_format_task_for_display(Task* t) {
 		strcat(display, "   ");
 	}
 	strcat(display, t->description);
-	if (t->completed) {
-		strcat(display, " [done]");
+	if (is_completed(t)) {
+		char *completion_date = malloc(10 * sizeof(char));
+		memset(completion_date, 0, 10 * sizeof(char));
+		struct tm *tm = localtime(t->completion_date);
+		strftime(completion_date, 10 * sizeof(char), "%D", tm);
+		strcat(display, " [done ");
+		strcat(display, completion_date);
+		strcat(display, "]");
+		free(completion_date);
 	}
 
 	return display;

@@ -34,6 +34,7 @@ TodoTxt *todotxt_open(char *filename) {
 	char **lines = malloc(size);
 	memset(lines, 0, size);
 	int len = read_lines(file, lines);
+	if (EOF == fclose(file)) return 0;
 
 	todo->len = len;
 	todo->lines = lines;

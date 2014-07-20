@@ -171,7 +171,7 @@ int _empty_line(char *line) {
 
 void _strip_lineend(char *line) {
 	char *lineend = strchr(line, '\n');
-	if (0 != lineend) {
+	if (NULL != lineend) {
 		int index = (int)(lineend - line);
 		line[index] = '\0';
 	}

@@ -44,7 +44,7 @@ void test_todotxt_read_tasks() {
 	TaskList *list = todotxt_read_tasklist(&todo);
 	assert(list->len == 1);
 	assert(is_unprioritized(list->tasks[0]));
-	assert(strcmp(list->tasks[0]->description, "One Task") == 0);
+	assert(0 == strcmp(list->tasks[0]->description, "One Task"));
 	free_tasklist(list);
 }
 
@@ -58,7 +58,7 @@ void test_todotxt_read_task_with_priority() {
 
 	TaskList *list = todotxt_read_tasklist(&todo);
 	assert(list->tasks[0]->priority == 'A');
-	assert(strcmp(list->tasks[0]->description, "Task") == 0);
+	assert(0 == strcmp(list->tasks[0]->description, "Task"));
 	assert(is_unprioritized(list->tasks[1]));
 	assert(is_unprioritized(list->tasks[2]));
 	free_tasklist(list);
@@ -80,7 +80,7 @@ void test_todotxt_read_completed_task() {
 	struct tm *tm = localtime(list->tasks[0]->completion_date);
 	strftime(completion_date, 10 * sizeof(char), "%m/%d/%Y", tm);
 	assert(0 == strcmp("02/22/2014", completion_date));
-	assert(strcmp("task", list->tasks[0]->description) == 0);
+	assert(0 == strcmp("task", list->tasks[0]->description));
 	assert(! is_completed(list->tasks[1]));
 	assert(! is_completed(list->tasks[2]));
 	assert(! is_completed(list->tasks[3]));
@@ -125,7 +125,7 @@ void test_copy_task() {
 
 	Task *copy = copy_task(proto);
 	assert('C' == copy->priority);
-	assert(strcmp("proto", copy->description) == 0);
+	assert(0 == strcmp("proto", copy->description));
 	assert(is_completed(copy));
 	assert(copy->completion_date);
 	assert(*proto->completion_date == *copy->completion_date);

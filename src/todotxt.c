@@ -104,8 +104,9 @@ int read_lines(FILE *file, char **lines) {
 		if (_empty_line(buffer)) continue;
 
 		_strip_lineend(buffer);
-		lines[count] = malloc(strlen(buffer));
-		strcpy(lines[count], buffer);
+		char *line =  malloc(strlen(buffer) + 1);
+		strcpy(line, buffer);
+		lines[count] = line;
 		count++;
 	}
 	return count;

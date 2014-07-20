@@ -15,10 +15,16 @@
 char *_create_tmpfile(char *template);
 
 void test_todotxt_open() {
-	TodoTxt *todo = todotxt_open("examples/todo.txt");
-	assert(todo != 0);
-	assert(todo->len > 0);
-	assert(strcmp(todo->lines[0], "") != 0);
+	char *tmpfile = _create_tmpfile("/tmp/todo.XXXXXXX");
+	FILE *fh = fopen(tmpfile, "w");
+	assert(fh);
+	fputs("32 bytes don't overlap with next\n", fh);
+	fputs("next line\n", fh);
+	assert(EOF != fclose(fh));
+
+	TodoTxt *todo = todotxt_open(tmpfile);
+	assert(0 == strcmp("32 bytes don't overlap with next", todo->lines[0]));
+	assert(0 == strcmp("next line", todo->lines[1]));
 	todotxt_close(todo);
 }
 

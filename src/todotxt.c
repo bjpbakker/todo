@@ -116,7 +116,9 @@ Task *_read_task(char *line) {
 	Task *t = create_empty_task();
 	int position = 0;
 	position += _read_completed(&line[position], t);
-	position += _read_priority(&line[position], t);
+	if (! is_completed(t)) {
+		position += _read_priority(&line[position], t);
+	}
 	position += _read_description(&line[position], t);
 	return t;
 }

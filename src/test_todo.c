@@ -50,17 +50,19 @@ void test_todotxt_read_tasks() {
 
 void test_todotxt_read_task_with_priority() {
 	TodoTxt todo;
-	todo.len = 3;
+	todo.len = 4;
 	todo.lines = malloc(todo.len * sizeof(char*));
 	todo.lines[0] = "(A) Task";
 	todo.lines[1] = "(A)-> Task";
 	todo.lines[2] = "(a) Task";
+	todo.lines[3] = "x 2014-07-22 (A) Task";
 
 	TaskList *list = todotxt_read_tasklist(&todo);
 	assert(list->tasks[0]->priority == 'A');
 	assert(0 == strcmp(list->tasks[0]->description, "Task"));
 	assert(is_unprioritized(list->tasks[1]));
 	assert(is_unprioritized(list->tasks[2]));
+	assert(is_unprioritized(list->tasks[3]));
 	free_tasklist(list);
 }
 

@@ -48,24 +48,6 @@ void test_todotxt_read_tasks() {
 	free_tasklist(list);
 }
 
-void test_todotxt_read_task_with_priority() {
-	TodoTxt todo;
-	todo.len = 4;
-	todo.lines = malloc(todo.len * sizeof(char*));
-	todo.lines[0] = "(A) Task";
-	todo.lines[1] = "(A)-> Task";
-	todo.lines[2] = "(a) Task";
-	todo.lines[3] = "x 2014-07-22 (A) Task";
-
-	TaskList *list = todotxt_read_tasklist(&todo);
-	assert(list->tasks[0]->priority == 'A');
-	assert(0 == strcmp(list->tasks[0]->description, "Task"));
-	assert(is_unprioritized(list->tasks[1]));
-	assert(is_unprioritized(list->tasks[2]));
-	assert(is_unprioritized(list->tasks[3]));
-	free_tasklist(list);
-}
-
 void test_todotxt_read_completed_task() {
 	TodoTxt todo;
 	todo.len = 4;
@@ -86,6 +68,24 @@ void test_todotxt_read_completed_task() {
 	assert(! is_completed(list->tasks[1]));
 	assert(! is_completed(list->tasks[2]));
 	assert(! is_completed(list->tasks[3]));
+	free_tasklist(list);
+}
+
+void test_todotxt_read_task_with_priority() {
+	TodoTxt todo;
+	todo.len = 4;
+	todo.lines = malloc(todo.len * sizeof(char*));
+	todo.lines[0] = "(A) Task";
+	todo.lines[1] = "(A)-> Task";
+	todo.lines[2] = "(a) Task";
+	todo.lines[3] = "x 2014-07-22 (A) Task";
+
+	TaskList *list = todotxt_read_tasklist(&todo);
+	assert(list->tasks[0]->priority == 'A');
+	assert(0 == strcmp(list->tasks[0]->description, "Task"));
+	assert(is_unprioritized(list->tasks[1]));
+	assert(is_unprioritized(list->tasks[2]));
+	assert(is_unprioritized(list->tasks[3]));
 	free_tasklist(list);
 }
 
@@ -184,8 +184,8 @@ int main() {
 	run_test(test_todotxt_open);
 	run_test(test_todotxt_open_with_non_existing_file);
 	run_test(test_todotxt_read_tasks);
-	run_test(test_todotxt_read_task_with_priority);
 	run_test(test_todotxt_read_completed_task);
+	run_test(test_todotxt_read_task_with_priority);
 	run_test(test_todotxt_write_tasks);
 	run_test(test_copy_task);
 	run_test(test_prioritized);

@@ -86,7 +86,9 @@ void _usage() {
 }
 
 char *_format_task_for_display(Task* t) {
-	char *display = malloc(strlen(t->description) + 30);
+	int display_max_len = strlen(t->description) + 30;
+	char *display = malloc(display_max_len);
+	memset(display, 0, display_max_len);
 	if (is_prioritized(t)) {
 		display[0] = t->priority; display[1] = ':'; display[2] = ' ';
 	} else {

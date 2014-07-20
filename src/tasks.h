@@ -6,6 +6,7 @@
 struct Task {
 	char *description;
 	char priority;
+	time_t *creation_date;
 	time_t *completion_date;
 };
 typedef struct Task Task;

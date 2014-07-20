@@ -16,7 +16,9 @@ TodoTxt *_create_todotxt(char *filename);
 Task *_read_task(char *line);
 int _read_completed(char *line, Task *dest);
 int _read_priority(char *line, Task *dest);
+int _read_creation_date(char *line, Task *dest);
 int _read_description(char *line, Task *dest);
+int _read_date(char *line, time_t *dest);
 
 int _fexists(char *filename);
 
@@ -119,24 +121,20 @@ Task *_read_task(char *line) {
 	if (! is_completed(t)) {
 		position += _read_priority(&line[position], t);
 	}
+	position += _read_creation_date(&line[position], t);
 	position += _read_description(&line[position], t);
 	return t;
 }
 
 int _read_completed(char *line, Task *dest) {
 	if (line[0] == 'x' && line[1] == ' ') {
-		struct tm tm;
-		char *endOfCompletionDate = strptime(&line[2], "%Y-%m-%d", &tm);
-		if (NULL != endOfCompletionDate) {
-			tm.tm_hour = 0;
-			tm.tm_min = 0;
-			tm.tm_sec = 0;
-			tm.tm_isdst = 0;
-			time_t time = mktime(&tm);
-			time_t *completion_date = malloc(sizeof(time_t));
-			memcpy(completion_date, &time, sizeof(time_t));
-			dest->completion_date = completion_date;
-			return (endOfCompletionDate + 1) - line;
+		time_t *time = malloc(sizeof(time_t));
+		int len_read = _read_date(&line[2], time);
+		if (len_read > 0) {
+			dest->completion_date = time;
+			return 2 + len_read + 1;
+		} else {
+			free(time);
 		}
 	}
 	return 0;
@@ -156,11 +154,38 @@ int _read_priority(char *line, Task *dest) {
 	}
 }
 
+int _read_creation_date(char *line, Task *dest) {
+	time_t *time = malloc(sizeof(time_t));
+	int len_read = _read_date(line, time);
+	if (len_read > 0) {
+		dest->creation_date = time;
+		return len_read + 1;
+	} else {
+		free(time);
+	}
+	return 0;
+}
+
 int _read_description(char *line, Task *dest) {
 	int len = strlen(line);
 	dest->description = malloc(len);
 	strcat(dest->description, line);
 	return len;
+}
+
+int _read_date(char *line, time_t *dest) {
+	struct tm tm;
+	char *endOfDate = strptime(line, "%Y-%m-%d", &tm);
+	if (NULL != endOfDate) {
+		tm.tm_hour = 0;
+		tm.tm_min = 0;
+		tm.tm_sec = 0;
+		tm.tm_isdst = 0;
+		time_t time = mktime(&tm);
+		memcpy(dest, &time, sizeof(time_t));
+		return endOfDate - line;
+	}
+	return 0;
 }
 
 int _fexists(char *filename) {

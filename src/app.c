@@ -8,6 +8,7 @@
 #include "todotxt.h"
 
 char *_format_task_for_display(Task* t);
+char *_format_date(time_t *time);
 
 struct Options {
 	char *file;
@@ -96,16 +97,24 @@ char *_format_task_for_display(Task* t) {
 	}
 	strcat(display, t->description);
 	if (is_completed(t)) {
-		char *completion_date = malloc(10 * sizeof(char));
-		memset(completion_date, 0, 10 * sizeof(char));
-		struct tm *tm = localtime(t->completion_date);
-		strftime(completion_date, 10 * sizeof(char), "%D", tm);
-		strcat(display, " [done ");
-		strcat(display, completion_date);
-		strcat(display, "]");
+		char *completion_date = _format_date(t->completion_date);
+		strcat(display, " [done "); strcat(display, completion_date); strcat(display, "]");
 		free(completion_date);
 	}
+    if (t->creation_date) {
+        char *creation_date = _format_date(t->creation_date);
+        strcat(display, " [created "); strcat(display, creation_date); strcat(display, "]");
+        free(creation_date);
+    }
 
 	return display;
+}
+
+char *_format_date(time_t *time) {
+    char *date_str = malloc(10 * sizeof(char));
+    memset(date_str, 0, 10 * sizeof(char));
+    struct tm *tm = localtime(time);
+    strftime(date_str, 10 * sizeof(char), "%D", tm);
+    return date_str;
 }
 

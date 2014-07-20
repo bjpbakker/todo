@@ -26,14 +26,22 @@ Task *create_empty_task() {
 	return t;
 }
 
+void *_copy(void *proto, size_t size) {
+	void *dest = malloc(size);
+	memset(dest, 0, size);
+	memcpy(dest, proto, size);
+	return dest;
+}
+
 Task *copy_task(Task *proto) {
 	Task *t = create_empty_task();
 	t->priority = proto->priority;
-	t->description = malloc(strlen(proto->description) * sizeof(char*));
-	strcat(t->description, proto->description);
+	t->description = (char*) _copy(proto->description, strlen(proto->description));
+	if (proto->creation_date) {
+		t->creation_date = _copy(proto->creation_date, sizeof(time_t));
+	}
 	if (proto->completion_date) {
-		t->completion_date = malloc(sizeof(time_t));
-		memcpy(t->completion_date, proto->completion_date, sizeof(time_t));
+		t->completion_date = _copy(proto->completion_date, sizeof(time_t));
 	}
 	return t;
 }
@@ -41,6 +49,8 @@ Task *copy_task(Task *proto) {
 void free_task(Task *task) {
 	if (task->description != 0)
 		free(task->description);
+	if (task->creation_date)
+		free(task->creation_date);
 	if (task->completion_date)
 		free(task->completion_date);
 	free(task);

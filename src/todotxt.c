@@ -125,7 +125,7 @@ int _read_completed(char *line, Task *dest) {
 	if (line[0] == 'x' && line[1] == ' ') {
 		struct tm tm;
 		char *endOfCompletionDate = strptime(&line[2], "%Y-%m-%d", &tm);
-		if (endOfCompletionDate != NULL) {
+		if (NULL != endOfCompletionDate) {
 			tm.tm_hour = 0;
 			tm.tm_min = 0;
 			tm.tm_sec = 0;
@@ -134,7 +134,7 @@ int _read_completed(char *line, Task *dest) {
 			time_t *completion_date = malloc(sizeof(time_t));
 			memcpy(completion_date, &time, sizeof(time_t));
 			dest->completion_date = completion_date;
-			return (endOfCompletionDate + sizeof(char)) - line;
+			return (endOfCompletionDate + 1) - line;
 		}
 	}
 	return 0;
@@ -156,7 +156,7 @@ int _read_priority(char *line, Task *dest) {
 
 int _read_description(char *line, Task *dest) {
 	int len = strlen(line);
-	dest->description = malloc(len * sizeof(char*));
+	dest->description = malloc(len);
 	strcat(dest->description, line);
 	return len;
 }

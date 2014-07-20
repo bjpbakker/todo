@@ -75,10 +75,10 @@ void test_todotxt_read_completed_task() {
 
 	TaskList *list = todotxt_read_tasklist(&todo);
 	assert(is_completed(list->tasks[0]));
-	char *completion_date = malloc(10 * sizeof(char));
-	memset(completion_date, 0, 10 * sizeof(char));
+	char *completion_date = malloc(10);
+	memset(completion_date, 0, 10);
 	struct tm *tm = localtime(list->tasks[0]->completion_date);
-	strftime(completion_date, 10 * sizeof(char), "%m/%d/%Y", tm);
+	strftime(completion_date, 10, "%m/%d/%Y", tm);
 	assert(0 == strcmp("02/22/2014", completion_date));
 	assert(0 == strcmp("task", list->tasks[0]->description));
 	assert(! is_completed(list->tasks[1]));
@@ -170,7 +170,7 @@ void test_sort_by_priority() {
 }
 
 char *_create_tmpfile(char *template) {
-	size_t size = strlen(template) * sizeof(char);
+	size_t size = strlen(template) + 1;
 	char *tmpfile = malloc(size);
 	memset(tmpfile, 0, size);
 	strncat(tmpfile, template, size);

@@ -172,7 +172,30 @@ void test_sort_by_priority() {
 	list->len = 3;
 
 	TaskList *sorted = create_tasklist(3);
-	tasklist_sort_by_priority(list, sorted);
+	tasklist_sort(list, sorted, by_priority);
+
+	assert(0 == strcmp("ONE", sorted->tasks[0]->description));
+	assert(0 == strcmp("TWO", sorted->tasks[1]->description));
+	assert(0 == strcmp("THREE", sorted->tasks[2]->description));
+
+	free_tasklist(list);
+	free_tasklist(sorted);
+}
+
+void test_sort_by_default() {
+	Task *one = create_prioritized_task("ONE", 'A');
+	Task *two = create_task("TWO");
+	Task *three = create_task("THREE");
+	three->completion_date = _current_time();
+
+	TaskList *list = create_tasklist(3);
+	list->tasks[0] = three;
+	list->tasks[1] = two;
+	list->tasks[2] = one;
+	list->len = 3;
+
+	TaskList *sorted = create_tasklist(3);
+	tasklist_sort(list, sorted, by_default);
 
 	assert(0 == strcmp("ONE", sorted->tasks[0]->description));
 	assert(0 == strcmp("TWO", sorted->tasks[1]->description));
@@ -233,6 +256,7 @@ int main() {
 	run_test(test_copy_task);
 	run_test(test_prioritized);
 	run_test(test_sort_by_priority);
+	run_test(test_sort_by_default);
 	run_test(test_days_taken_to_complete);
 	printf("\nOK\n");
 	return 0;

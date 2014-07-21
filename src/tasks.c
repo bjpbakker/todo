@@ -4,8 +4,6 @@
 
 #include "tasks.h"
 
-int _by_priority(const void *lhs, const void *rhs);
-
 Task *create_task(char *description) {
 	Task *t = malloc(sizeof(Task));
 	memset(t, 0, sizeof(Task));
@@ -91,16 +89,24 @@ void free_tasklist(TaskList *list) {
 	free(list);
 }
 
-void tasklist_sort_by_priority(TaskList *src, TaskList *dest) {
+void tasklist_sort(TaskList *src, TaskList *dest, int (*comp)(const void *lhs, const void *rhs)) {
 	for (int i = 0; i < src->len; ++i) {
 		Task *t = copy_task(src->tasks[i]);
 		dest->tasks[i] = t;
 	}
 	dest->len = src->len;
-	qsort(dest->tasks, dest->len, sizeof(Task*), _by_priority);
+	qsort(dest->tasks, dest->len, sizeof(Task*), comp);
 }
 
-int _by_priority(const void *lhs, const void *rhs) {
+int by_default(const void *lhs, const void *rhs) {
+	Task *t1 = *(Task**)lhs;
+	Task *t2 = *(Task**)rhs;
+	if (is_completed(t1) && ! is_completed(t2)) return 1;
+	if (! is_completed(t1) && is_completed(t2)) return -1;
+	return by_priority(lhs, rhs);
+}
+
+int by_priority(const void *lhs, const void *rhs) {
 	Task *t1 = *(Task**)lhs;
 	Task *t2 = *(Task**)rhs;
 	if (t1->priority == t2->priority) return 0;

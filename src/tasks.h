@@ -32,6 +32,10 @@ TaskList *create_tasklist(int capacity);
 void free_tasklist(TaskList *list);
 
 void tasklist_sort_by_priority(TaskList *src, TaskList *dest);
+void tasklist_sort(TaskList *src, TaskList *dest, int (*comp)(const void *lhs, const void *rhs));
+
+int by_default(const void *lhs, const void *rhs);
+int by_priority(const void *lhs, const void *rhs);
 
 #endif
 

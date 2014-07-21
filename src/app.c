@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 
 	TaskList *list = todotxt_read_tasklist(todo);
 	TaskList *prioritized = create_tasklist(list->len);
-	tasklist_sort_by_priority(list, prioritized);
+	tasklist_sort(list, prioritized, by_default);
 
 	for (int i = 0; i < prioritized->len; ++i) {
 		Task *task = prioritized->tasks[i];

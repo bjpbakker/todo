@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "tasks.h"
 
@@ -66,6 +67,11 @@ int is_prioritized(Task *task) {
 
 int is_unprioritized(Task *task) {
 	return ! is_prioritized(task);
+}
+
+int days_taken_to_complete(Task *task) {
+	double diff_in_sec = difftime(*task->completion_date, *task->creation_date);
+	return diff_in_sec / 60 / 60 / 24;
 }
 
 TaskList *create_tasklist(int capacity) {

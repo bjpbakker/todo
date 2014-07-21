@@ -9,6 +9,7 @@
 
 char *_format_task_for_display(Task* t);
 char *_format_date(time_t *time);
+char *_format_days(int n);
 
 struct Options {
 	char *file;
@@ -87,7 +88,7 @@ void _usage() {
 }
 
 char *_format_task_for_display(Task* t) {
-	int display_max_len = strlen(t->description) + 30;
+	int display_max_len = strlen(t->description) + 80;
 	char *display = malloc(display_max_len);
 	memset(display, 0, display_max_len);
 	if (is_prioritized(t)) {
@@ -98,23 +99,44 @@ char *_format_task_for_display(Task* t) {
 	strcat(display, t->description);
 	if (is_completed(t)) {
 		char *completion_date = _format_date(t->completion_date);
-		strcat(display, " [done "); strcat(display, completion_date); strcat(display, "]");
+		strcat(display, " [done "); strcat(display, completion_date);
+		if (t->creation_date) {
+			char *days = _format_days(days_taken_to_complete(t));
+			strcat(display, ", took "); strcat(display, days); strcat(display, " to complete");
+			free(days);
+		}
+		strcat(display, "]");
 		free(completion_date);
 	}
-    if (t->creation_date) {
-        char *creation_date = _format_date(t->creation_date);
-        strcat(display, " [created "); strcat(display, creation_date); strcat(display, "]");
-        free(creation_date);
-    }
+	if (t->creation_date && ! is_completed(t)) {
+		char *creation_date = _format_date(t->creation_date);
+		strcat(display, " [created "); strcat(display, creation_date); strcat(display, "]");
+		free(creation_date);
+	}
 
 	return display;
 }
 
 char *_format_date(time_t *time) {
-    char *date_str = malloc(10 * sizeof(char));
-    memset(date_str, 0, 10 * sizeof(char));
-    struct tm *tm = localtime(time);
-    strftime(date_str, 10 * sizeof(char), "%D", tm);
-    return date_str;
+	char *date_str = malloc(10);
+	memset(date_str, 0, 10);
+	struct tm *tm = localtime(time);
+	strftime(date_str, 10, "%D", tm);
+	return date_str;
+}
+
+char *_format_days(int n) {
+	char *days = malloc(8);
+	int len = sprintf(days, "%d", n);
+	char *formatted = malloc(len + 6);
+	memset(formatted, 0, 6);
+	strncat(formatted, days, len); strcat(formatted, " ");
+	if (n == 1) {
+		strcat(formatted, "day");
+	} else {
+		strcat(formatted, "days");
+	}
+	free(days);
+	return formatted;
 }
 

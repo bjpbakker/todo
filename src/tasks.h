@@ -26,6 +26,7 @@ void free_task(Task *task);
 int is_completed(Task *task);
 int is_prioritized(Task *task);
 int is_unprioritized(Task *task);
+int days_taken_to_complete(Task *task);
 
 TaskList *create_tasklist(int capacity);
 void free_tasklist(TaskList *list);

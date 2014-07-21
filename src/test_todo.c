@@ -14,6 +14,8 @@
 
 
 char *_create_tmpfile(char *template);
+time_t *_delta_time();
+time_t *_current_time();
 char *_format_date(time_t *time);
 
 void test_todotxt_open() {
@@ -128,13 +130,6 @@ void test_todotxt_write_tasks() {
 	free(tmpfile);
 }
 
-time_t *_current_time() {
-	time_t *now = malloc(sizeof(time_t));
-	memset(now, 0, sizeof(time_t));
-	time(now);
-	return now;
-}
-
 void test_copy_task() {
 	Task *proto = create_prioritized_task("proto", 'C');
 	proto->creation_date = _current_time();
@@ -187,6 +182,18 @@ void test_sort_by_priority() {
 	free_tasklist(sorted);
 }
 
+void test_days_taken_to_complete() {
+	Task *completed_immediately = create_task("t");
+	completed_immediately->creation_date = _current_time();
+	completed_immediately->completion_date = _current_time();
+	assert(0 == days_taken_to_complete(completed_immediately));
+
+	Task *took_one_day = create_task("t");
+	took_one_day->creation_date = _delta_time(-1);
+	took_one_day->completion_date = _current_time();
+	assert(1 == days_taken_to_complete(took_one_day));
+}
+
 char *_create_tmpfile(char *template) {
 	size_t size = strlen(template) + 1;
 	char *tmpfile = malloc(size);
@@ -194,6 +201,17 @@ char *_create_tmpfile(char *template) {
 	strncat(tmpfile, template, size);
 	mkstemp(tmpfile);
 	return tmpfile;
+}
+
+time_t *_delta_time(int d_days) {
+	time_t *t = malloc(sizeof(time_t));
+	time_t now = time(NULL) + d_days * 24 * 60 * 60;
+	memcpy(t, &now, sizeof(time_t));
+	return t;
+}
+
+time_t *_current_time() {
+	return _delta_time(0);
 }
 
 char *_format_date(time_t *time) {
@@ -215,6 +233,7 @@ int main() {
 	run_test(test_copy_task);
 	run_test(test_prioritized);
 	run_test(test_sort_by_priority);
+	run_test(test_days_taken_to_complete);
 	printf("\nOK\n");
 	return 0;
 }

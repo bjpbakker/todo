@@ -6,6 +6,7 @@
 
 #include "tasks.h"
 #include "todotxt.h"
+#include "version.h"
 
 char *_format_task_for_display(Task* t);
 char *_format_date(time_t *time);
@@ -21,6 +22,7 @@ Options *_parse_options(int argc, char **argv);
 Options *_create_default_options();
 
 void _usage();
+void _version();
 
 int main(int argc, char **argv) {
 	Options *options = _parse_options(argc, argv);
@@ -49,7 +51,7 @@ int main(int argc, char **argv) {
 Options *_parse_options(int argc, char **argv) {
 	Options *options = _create_default_options();
 	int ch;
-	while ((ch = getopt(argc, argv, "hf:x")) != -1) {
+	while ((ch = getopt(argc, argv, "f:hvx")) != -1) {
 		switch (ch) {
 			case 'f':
 				options->file = optarg;
@@ -60,6 +62,9 @@ Options *_parse_options(int argc, char **argv) {
 			case 'x':
 				options->show_completed = 1;
 				break;
+			case 'v':
+				_version();
+				exit(0);
 			case '?':
 			default:
 				_usage();
@@ -84,7 +89,16 @@ void _usage() {
 	puts("options:");
 	puts("\t-f FILE\ttodotxt file to use (default: todo.txt)");
 	puts("\t-x\tshow completed tasks");
+	puts("\t-v\tprint version info");
 	puts("");
+}
+
+void _version() {
+	if (VERSION_IS_RELEASE) {
+		printf("todo, release %s\n", VERSION_GIT_TAG);
+	} else {
+		printf("todo, build %s\n", VERSION_GIT_REF);
+	}
 }
 
 char *_format_task_for_display(Task* t) {

@@ -1,0 +1,8 @@
+#ifndef VERSION_H
+#define VERSION_H
+
+#define VERSION_IS_RELEASE 0
+#define VERSION_GIT_TAG "v0.1"
+#define VERSION_GIT_REF "86a3fa20eab195d212585f5b975312ce9c2dc460"
+
+#endif

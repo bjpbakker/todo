@@ -49,8 +49,8 @@ TodoTxt *_create_todotxt(char *filename) {
 	TodoTxt *todo = malloc(sizeof(TodoTxt));
 	todo->len = 0;
 	todo->lines = 0;
-	todo->filename = malloc(strlen(filename));
-	strcat(todo->filename, filename);
+	todo->filename = malloc(strlen(filename) + 1);
+	strcpy(todo->filename, filename);
 	return todo;
 }
 
@@ -89,7 +89,7 @@ int todotxt_write_tasklist(TodoTxt *todo, TaskList *tasks) {
 		}
 		strcpy(&buffer[position], task->description);
 		fputs(buffer, fh); fputs("\n", fh);
-		lines[i] = malloc(strlen(buffer));
+		lines[i] = malloc(strlen(buffer) + 1);
 		strcpy(lines[i], buffer);
 	}
 	if (EOF == fclose(fh)) return 0;
@@ -167,9 +167,9 @@ int _read_creation_date(char *line, Task *dest) {
 }
 
 int _read_description(char *line, Task *dest) {
-	int len = strlen(line);
+	int len = strlen(line) + 1;
 	dest->description = malloc(len);
-	strcat(dest->description, line);
+	strcpy(dest->description, line);
 	return len;
 }
 

@@ -7,8 +7,8 @@
 Task *create_task(char *description) {
 	Task *t = malloc(sizeof(Task));
 	memset(t, 0, sizeof(Task));
-	t->description = malloc(strlen(description) * sizeof(char *));
-	strcat(t->description, description);
+	t->description = malloc(strlen(description) + 1);
+	strcpy(t->description, description);
 	t->priority = '\0';
 	return t;
 }
@@ -35,7 +35,7 @@ void *_copy(void *proto, size_t size) {
 Task *copy_task(Task *proto) {
 	Task *t = create_empty_task();
 	t->priority = proto->priority;
-	t->description = (char*) _copy(proto->description, strlen(proto->description));
+	t->description = (char*) _copy(proto->description, strlen(proto->description) + 1);
 	if (proto->creation_date) {
 		t->creation_date = _copy(proto->creation_date, sizeof(time_t));
 	}

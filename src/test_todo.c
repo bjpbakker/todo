@@ -139,7 +139,6 @@ void test_copy_task() {
 	assert('C' == copy->priority);
 	assert(0 == strcmp("proto", copy->description));
 	assert(is_completed(copy));
-	assert(copy->completion_date);
 	assert(*proto->creation_date == *copy->creation_date);
 	assert(*proto->completion_date == *copy->completion_date);
 

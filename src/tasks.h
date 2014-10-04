@@ -6,6 +6,7 @@
 struct Task {
 	char *description;
 	char priority;
+	unsigned int completed;
 	time_t *creation_date;
 	time_t *completion_date;
 };

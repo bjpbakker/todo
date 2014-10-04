@@ -67,7 +67,8 @@ void test_todotxt_read_completed_task() {
 	assert(0 == strcmp("task", list->tasks[0]->description));
 	assert(! is_completed(list->tasks[1]));
 	assert(! is_completed(list->tasks[2]));
-	assert(! is_completed(list->tasks[3]));
+	assert(is_completed(list->tasks[3]));
+	assert(0 == strcmp("task", list->tasks[3]->description));
 	free_tasklist(list);
 }
 
@@ -133,6 +134,7 @@ void test_todotxt_write_tasks() {
 void test_copy_task() {
 	Task *proto = create_prioritized_task("proto", 'C');
 	proto->creation_date = _current_time();
+	proto->completed = 1;
 	proto->completion_date = _current_time();
 
 	Task *copy = copy_task(proto);
@@ -185,6 +187,7 @@ void test_sort_by_default() {
 	Task *one = create_prioritized_task("ONE", 'A');
 	Task *two = create_task("TWO");
 	Task *three = create_task("THREE");
+	three->completed = 1;
 	three->completion_date = _current_time();
 
 	TaskList *list = create_tasklist(3);

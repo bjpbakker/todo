@@ -4,4 +4,4 @@ Unprioritized
 x 2014-07-20 2014-07-19 Some completed task
 x 2014-07-21 2014-07-19 Another completed task
 (A) 2014-07-03 Task of Mine!
-
+x Completed task without a completion date

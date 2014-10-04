@@ -15,6 +15,7 @@ TodoTxt *_create_todotxt(char *filename);
 
 Task *_read_task(char *line);
 int _read_completed(char *line, Task *dest);
+int _read_completion_date(char *line, Task *dest);
 int _read_priority(char *line, Task *dest);
 int _read_creation_date(char *line, Task *dest);
 int _read_description(char *line, Task *dest);
@@ -118,6 +119,9 @@ Task *_read_task(char *line) {
 	Task *t = create_empty_task();
 	int position = 0;
 	position += _read_completed(&line[position], t);
+	if (is_completed(t)) {
+		position += _read_completion_date(&line[position], t);
+	}
 	if (! is_completed(t)) {
 		position += _read_priority(&line[position], t);
 	}
@@ -128,16 +132,24 @@ Task *_read_task(char *line) {
 
 int _read_completed(char *line, Task *dest) {
 	if (line[0] == 'x' && line[1] == ' ') {
-		time_t *time = malloc(sizeof(time_t));
-		int len_read = _read_date(&line[2], time);
-		if (len_read > 0) {
-			dest->completion_date = time;
-			return 2 + len_read + 1;
-		} else {
-			free(time);
-		}
+		dest->completed = 1;
+		return 2;
+	} else {
+		dest->completed = 0;
+		return 0;
 	}
-	return 0;
+}
+
+int _read_completion_date(char *line, Task *dest) {
+	time_t *time = malloc(sizeof(time_t));
+	int len_read = _read_date(line, time);
+	if (len_read) {
+		dest->completion_date = time;
+		return len_read + 1;
+	} else {
+		free(time);
+		return 0;
+	}
 }
 
 int _read_priority(char *line, Task *dest) {

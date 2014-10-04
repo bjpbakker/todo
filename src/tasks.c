@@ -36,6 +36,7 @@ Task *copy_task(Task *proto) {
 	Task *t = create_empty_task();
 	t->priority = proto->priority;
 	t->description = (char*) _copy(proto->description, strlen(proto->description) + 1);
+	t->completed = proto->completed;
 	if (proto->creation_date) {
 		t->creation_date = _copy(proto->creation_date, sizeof(time_t));
 	}
@@ -56,7 +57,7 @@ void free_task(Task *task) {
 }
 
 int is_completed(Task *task) {
-	return task->completion_date != NULL;
+	return task->completed;
 }
 
 int is_prioritized(Task *task) {
@@ -113,4 +114,3 @@ int by_priority(const void *lhs, const void *rhs) {
 	if (is_unprioritized(t2) || (is_prioritized(t1) && t1->priority < t2->priority)) return -1;
 	return 1; // is_unprioritized(t1) || t1->priority > t2->priority
 }
-

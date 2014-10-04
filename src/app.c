@@ -112,17 +112,19 @@ char *_format_task_for_display(Task* t) {
 	}
 	strcat(display, t->description);
 	if (is_completed(t)) {
-		char *completion_date = _format_date(t->completion_date);
-		strcat(display, " [done "); strcat(display, completion_date);
-		if (t->creation_date) {
-			char *days = _format_days(days_taken_to_complete(t));
-			strcat(display, ", took "); strcat(display, days); strcat(display, " to complete");
-			free(days);
+		strcat(display, " [done");
+		if (t->completion_date) {
+			char *completion_date = _format_date(t->completion_date);
+			strcat(display, " "); strcat(display, completion_date);
+			if (t->creation_date) {
+				char *days = _format_days(days_taken_to_complete(t));
+				strcat(display, ", took "); strcat(display, days); strcat(display, " to complete");
+				free(days);
+			}
+			free(completion_date);
 		}
 		strcat(display, "]");
-		free(completion_date);
-	}
-	if (t->creation_date && ! is_completed(t)) {
+	} else if (t->creation_date && ! is_completed(t)) {
 		char *creation_date = _format_date(t->creation_date);
 		strcat(display, " [created "); strcat(display, creation_date); strcat(display, "]");
 		free(creation_date);

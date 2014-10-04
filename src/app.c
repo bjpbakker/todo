@@ -8,7 +8,7 @@
 #include "todotxt.h"
 #include "version.h"
 
-char *_format_task_for_display(Task* t);
+char *_format_task_for_display(Task* t, Task* previous);
 char *_format_date(time_t *time);
 char *_format_days(int n);
 
@@ -34,13 +34,15 @@ int main(int argc, char **argv) {
 	TaskList *prioritized = create_tasklist(list->len);
 	tasklist_sort(list, prioritized, by_default);
 
+	Task* last_rendered = 0;
 	for (int i = 0; i < prioritized->len; ++i) {
 		Task *task = prioritized->tasks[i];
 		if (is_completed(task) && ! options->show_completed) continue;
 
-		char *formatted = _format_task_for_display(task);
+		char *formatted = _format_task_for_display(task, last_rendered);
 		puts(formatted);
 		free(formatted);
+		last_rendered = task;
 
 	}
 	free_tasklist(prioritized);
@@ -101,11 +103,14 @@ void _version() {
 	}
 }
 
-char *_format_task_for_display(Task* t) {
+char *_format_task_for_display(Task* t, Task* previous) {
 	int display_max_len = strlen(t->description) + 80;
 	char *display = malloc(display_max_len);
 	memset(display, 0, display_max_len);
-	if (is_prioritized(t)) {
+    if (previous && is_prioritized(previous) && ! is_prioritized(t)) {
+        strcat(display, "\n");
+    }
+	if (is_prioritized(t) && (! previous || previous->priority != t->priority)) {
 		display[0] = t->priority; display[1] = ':'; display[2] = ' ';
 	} else {
 		strcat(display, "   ");
